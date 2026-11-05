@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uyap Asistan</title>
+<meta name="description" content="Uyap Asistan kurulum dosyası, kurulum adımları ve kullanım rehberi.">
+<meta name="robots" content="noindex">
+<style>
+:root {
+  --zemin: #f4f5f7; --yuzey: #ffffff; --yuzey-2: #fafbfc;
+  --yazi: #121826; --yazi-2: #3b4352; --soluk: #6b7383;
+  --cizgi: #e3e6eb; --vurgu: #8a1c2b; --vurgu-koyu: #6f1522; --vurgu-acik: #f7ecee; --vurgu-cizgi: #e7c6cc;
+  --bekle-acik: #fdf3e6; --bekle-cizgi: #f1d9b5; --bekle: #8a4a0b;
+  --kenar: #121822; --kenar-yazi: #aab3c2; --kenar-guclu: #f3f5f8;
+  --golge: 0 1px 3px rgba(16, 24, 40, .06), 0 1px 2px rgba(16, 24, 40, .04);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --zemin: #0f141c; --yuzey: #171d27; --yuzey-2: #1b222d;
+    --yazi: #eef1f6; --yazi-2: #c7cdd8; --soluk: #97a0b0;
+    --cizgi: #2a3341; --vurgu: #d86a7c; --vurgu-koyu: #e58696; --vurgu-acik: #2a1b20; --vurgu-cizgi: #4d2c34;
+    --bekle-acik: #2a2115; --bekle-cizgi: #4b3a20; --bekle: #e5b66f;
+    --golge: none;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --zemin: #0f141c; --yuzey: #171d27; --yuzey-2: #1b222d;
+  --yazi: #eef1f6; --yazi-2: #c7cdd8; --soluk: #97a0b0;
+  --cizgi: #2a3341; --vurgu: #d86a7c; --vurgu-koyu: #e58696; --vurgu-acik: #2a1b20; --vurgu-cizgi: #4d2c34;
+  --bekle-acik: #2a2115; --bekle-cizgi: #4b3a20; --bekle: #e5b66f;
+  --golge: none;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--zemin); color: var(--yazi); font: 16px/1.6 "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif; }
+a { color: var(--vurgu); }
+h1, h2, h3 { font-family: "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif; line-height: 1.25; }
+code, kbd { font-family: "Cascadia Mono", Consolas, monospace; font-size: .9em; background: var(--yuzey-2); border: 1px solid var(--cizgi); border-radius: 5px; padding: .05em .35em; }
+
+.ust { background: var(--kenar); color: var(--kenar-guclu); padding: 56px 16px 64px; }
+.ust-ic { max-width: 880px; margin: 0 auto; }
+.marka { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 18px; margin-bottom: 28px; }
+.marka i { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 9px; background: #8a1c2b; color: #fff; font-style: normal; font-weight: 700; font-size: 14px; letter-spacing: .02em; }
+.ust h1 { margin: 0 0 12px; font-size: clamp(28px, 5vw, 40px); font-weight: 600; letter-spacing: -.01em; max-width: 680px; }
+.ust p { margin: 0 0 28px; color: var(--kenar-yazi); font-size: 18px; max-width: 640px; }
+.dugmeler { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.indir { display: inline-flex; align-items: center; gap: 10px; padding: 13px 22px; background: #8a1c2b; color: #fff; border-radius: 10px; font-weight: 600; text-decoration: none; }
+.indir:hover { background: #a02233; }
+.ikincil { padding: 13px 18px; background: transparent; color: var(--kenar-guclu); border: 1px solid #39465a; border-radius: 10px; font: inherit; cursor: pointer; text-decoration: none; }
+.ikincil:hover { background: #1a2230; }
+.surum { margin: 14px 0 0; color: var(--kenar-yazi); font-size: 14px; }
+
+.gezinti { position: sticky; top: 0; z-index: 2; background: var(--yuzey); border-bottom: 1px solid var(--cizgi); overflow-x: auto; }
+.gezinti-ic { max-width: 880px; margin: 0 auto; display: flex; gap: 20px; padding: 0 16px; white-space: nowrap; }
+.gezinti a { display: block; padding: 13px 0; color: var(--yazi-2); text-decoration: none; font-size: 15px; }
+.gezinti a:hover { color: var(--vurgu); }
+
+main { max-width: 880px; margin: 0 auto; padding: 8px 16px 64px; }
+section { padding-top: 40px; scroll-margin-top: 44px; }
+h2 { font-size: 26px; font-weight: 600; margin: 0 0 8px; }
+.alt { margin: 0 0 20px; color: var(--soluk); }
+.panel { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 12px; padding: 20px; box-shadow: var(--golge); }
+ul { padding-left: 20px; margin: 0; }
+li + li { margin-top: 6px; }
+
+.adimlar { list-style: none; counter-reset: a; padding: 0; margin: 0; }
+.adimlar > li { counter-increment: a; position: relative; padding: 0 0 22px 48px; margin: 0; }
+.adimlar > li::before { content: counter(a); position: absolute; left: 0; top: 0; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; font-weight: 600; font-size: 15px; background: var(--vurgu-acik); color: var(--vurgu); border: 1px solid var(--vurgu-cizgi); }
+.adimlar > li:last-child { padding-bottom: 0; }
+.adimlar h3 { margin: 3px 0 4px; font-size: 17px; font-weight: 600; }
+.adimlar p { margin: 0; color: var(--yazi-2); }
+
+.izgara { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.kart { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 12px; padding: 16px 18px; box-shadow: var(--golge); }
+.kart h3 { margin: 0 0 6px; font-size: 17px; font-weight: 600; }
+.kart p { margin: 0 0 6px; color: var(--yazi-2); font-size: 15px; }
+.kart ul { color: var(--yazi-2); font-size: 15px; }
+.kart li + li { margin-top: 3px; }
+.grup { margin: 28px 0 12px; font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--soluk); }
+
+.not { background: var(--bekle-acik); border: 1px solid var(--bekle-cizgi); border-radius: 12px; padding: 14px 18px; margin-top: 16px; font-size: 15px; }
+.not strong { color: var(--bekle); }
+
+details { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 10px; padding: 0 18px; }
+details + details { margin-top: 8px; }
+summary { cursor: pointer; padding: 13px 0; font-weight: 600; }
+details p { margin: 0 0 14px; color: var(--yazi-2); }
+
+footer { max-width: 880px; margin: 0 auto; padding: 0 16px 40px; color: var(--soluk); font-size: 14px; }
+
+@media (max-width: 640px) {
+  .izgara { grid-template-columns: minmax(0, 1fr); }
+  .ust { padding: 36px 16px 44px; }
+  .indir, .ikincil { width: 100%; justify-content: center; text-align: center; }
+}
+@media print {
+  .gezinti, .dugmeler, .surum { display: none; }
+  .ust { background: none; color: #000; padding: 0 0 12px; }
+  .ust p, .marka { color: #000; }
+  body { background: #fff; color: #000; font-size: 11.5pt; }
+  .kart, .panel, details { box-shadow: none; break-inside: avoid; }
+  details { border: 0; padding: 0; }
+  section { padding-top: 18px; }
+}
+</style>
+</head>
+<body>
+
+<header class="ust">
+  <div class="ust-ic">
+    <div class="marka"><i>UA</i> Uyap Asistan</div>
+    <h1>UYAP dosyalarınız, dilekçeleriniz ve süreleriniz tek programda</h1>
+    <p>Windows için avukat masaüstü programı. UYAP'tan yalnızca okur; asistan kendi Claude hesabınızla çalışır.</p>
+    <div class="dugmeler">
+      <a class="indir" id="indir" href="https://github.com/emrhsgn-creator/uyap-asistan-surumler/releases/latest">Windows için indir</a>
+      <button class="ikincil" type="button" id="yazdir">Bu rehberi PDF kaydet</button>
+    </div>
+    <p class="surum" id="surum">Program yalnızca size verilen erişim koduyla açılır.</p>
+  </div>
+</header>
+
+<nav class="gezinti" aria-label="Bölümler">
+  <div class="gezinti-ic">
+    <a href="#gerekenler">Gerekenler</a>
+    <a href="#kurulum">Kurulum</a>
+    <a href="#alanlar">Neler yapılır</a>
+    <a href="#guvenlik">Veri ve güvenlik</a>
+    <a href="#sorunlar">Sorun giderme</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="gerekenler">
+  <h2>Başlamadan önce</h2>
+  <p class="alt">Kuruluma başlamadan bunları hazırlayın.</p>
+  <div class="panel">
+    <ul>
+      <li><strong>Windows 10 ya da 11</strong> yüklü bir bilgisayar.</li>
+      <li><strong>Erişim kodu.</strong> Sizi davet eden kişi verir; kod kişiye özeldir.</li>
+      <li><strong>Claude Pro ya da Max aboneliği.</strong> Asistan kendi hesabınızla çalışır, API anahtarı gerekmez.</li>
+      <li><strong>E-imza kartı ve sürücüsü.</strong> UYAP girişi için gerekir.</li>
+      <li><strong>İsteğe bağlı:</strong> UDF ve Word dosyalarını PDF'le birleştirmek için Microsoft Word, telefona bildirim için Telegram, tabletten kullanım için Tailscale.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="kurulum">
+  <h2>Kurulum</h2>
+  <p class="alt">İlk açılıştaki sihirbaz sizi adım adım götürür. Toplam süre birkaç dakikadır.</p>
+  <div class="panel">
+    <ol class="adimlar">
+      <li>
+        <h3>Kurulum dosyasını indirip açın</h3>
+        <p>Yukarıdaki düğmeyle <code>Uyap-Asistan-Kurulum</code> dosyasını indirin ve çift tıklayın. Kurulum kendiliğinden biter, masaüstüne kısayol ekler. Windows mavi bir uyarı gösterirse <strong>Ek bilgi → Yine de çalıştır</strong> seçin.</p>
+      </li>
+      <li>
+        <h3>Erişim kodunu girin</h3>
+        <p>Program ilk açılışta kodu sorar. Kod bir kez girilir, sonraki açılışlarda sorulmaz.</p>
+      </li>
+      <li>
+        <h3>Bilgileriniz</h3>
+        <p>Adınızı soyadınızı, varsa büro adınızı yazın ve evrak klasörünü seçin. UYAP'tan indirilen evraklar ve dilekçeler bu klasörde durur.</p>
+      </li>
+      <li>
+        <h3>Claude'u bağlayın</h3>
+        <p><strong>Kur</strong> düğmesi Claude Code'u bu bilgisayara kurar (yaklaşık 1 dakika). <strong>Giriş yap</strong> tarayıcıyı açar; Claude hesabınızla giriş yapın.</p>
+      </li>
+      <li>
+        <h3>Hukuk araştırma</h3>
+        <p>İçtihat, mevzuat, Resmî Gazete ve atıf doğrulama programla birlikte gelir. Anlamsal içtihat araması isteğe bağlıdır: yaklaşık 2 GB indirir, 8 GB RAM önerilir.</p>
+      </li>
+      <li>
+        <h3>UYAP'a e-imzayla girin</h3>
+        <p>Kartınız takılıyken <strong>UYAP oturumu</strong> sayfasında cihazı ve sertifikayı seçip PIN'inizi girin. Giriş ekranı Avukat Portal'ın kendi ekranıdır.</p>
+      </li>
+      <li>
+        <h3>İsterseniz antetinizi ekleyin</h3>
+        <p><strong>Ayarlar → Dilekçe</strong> bölümünden antetli boş UDF ve Word dosyanızı seçin. Dilekçeler bundan sonra bu dosyaların içine yazılır.</p>
+      </li>
+    </ol>
+  </div>
+  <div class="not"><strong>Güncellemeler</strong> kendiliğinden iner. Program yeniden başlatınca ya da kapanırken kurulur; bu sırada UYAP oturumu kapanır.</div>
+</section>
+
+<section id="alanlar">
+  <h2>Programda neler yapılır</h2>
+  <p class="alt">Sol menüdeki sırayla.</p>
+
+  <div class="grup">Çalışma</div>
+  <div class="izgara">
+    <article class="kart">
+      <h3>Genel bakış</h3>
+      <p>Bekleyen süreli işler, 7 gün içindeki duruşmalar, UYAP bağlantısı ve son bildirimler tek ekranda.</p>
+    </article>
+    <article class="kart">
+      <h3>Asistan</h3>
+      <p>Türkçe yazarak çalışırsınız. Dosya ve evrak ekleyebilirsiniz.</p>
+      <ul>
+        <li>Dava, cevap ve beyan dilekçesi yazdırma (UDF + Word)</li>
+        <li>Karşı dilekçeye beyan hazırlama</li>
+        <li>İçtihat araştırma, emsal atıf doğrulama</li>
+        <li>Evrak özetleme, tebligat ve iş sorma</li>
+      </ul>
+    </article>
+    <article class="kart">
+      <h3>Hukuki danışmanlık</h3>
+      <p>Soru sorun ya da somut olayı anlatın. Asistan seçtiğiniz kaynakları (mevzuat, içtihat, kurum kararları, doktrin, tezler) tarayıp gerekçeli değerlendirme verir.</p>
+    </article>
+    <article class="kart">
+      <h3>Sözleşme inceleme</h3>
+      <p>Sözleşmeyi seçin, kimin açısından bakılacağını yazın. Riskli ve eksik hükümleri, mevzuata aykırılıkları ve önerilen madde metinlerini Word rapor olarak alırsınız.</p>
+    </article>
+    <article class="kart">
+      <h3>İşler</h3>
+      <p>UETS tebligatlarından, duruşma zabıtlarından gelen ya da elle eklenen süreli işler. Son gün kurallara göre önerilir; siz kontrol edip onaylarsınız. Son güne yaklaşınca uyarı gelir.</p>
+    </article>
+    <article class="kart">
+      <h3>Duruşmalar</h3>
+      <p>Tarih aralığındaki duruşmaları UYAP'tan getirir. Duruşmadan önce hatırlatma ve günlük özet alabilirsiniz.</p>
+    </article>
+  </div>
+
+  <div class="grup">Dosya ve belgeler</div>
+  <div class="izgara">
+    <article class="kart">
+      <h3>Dosyalarım</h3>
+      <p>Hukuk, icra ve ceza dosyaları; açık ya da kapalı, adliye, tür ve esas yılına göre süzgeç.</p>
+      <ul>
+        <li>Taraflar, evraklar, safahat ve notlar</li>
+        <li>Takip et: yeni evrak gelince bildirim</li>
+        <li>Hazır dilekçe: mahkeme ve taraflar UYAP'tan dolar</li>
+        <li>Bu dosya için asistan: dosya hafızasıyla çalışır</li>
+      </ul>
+    </article>
+    <article class="kart">
+      <h3>Dilekçeler</h3>
+      <p>Kalıp dilekçeler formdan hazırlanır; kendi şablonlarınızı ekleyebilirsiniz. Kayıtlı dilekçeleri açar, <strong>Denetle</strong> ile biçim hatalarını, <strong>Asistana denetlet</strong> ile atıfları kontrol edersiniz.</p>
+    </article>
+    <article class="kart">
+      <h3>Evraklar</h3>
+      <p>Evrak klasöründe içerik araması ve önizleme. Dilekçe eklerini sıralayıp EKLER metnini kopyalayabilir, tek PDF yapabilir ya da asistana verebilirsiniz.</p>
+    </article>
+    <article class="kart">
+      <h3>Belge araçları</h3>
+      <ul>
+        <li>PDF birleştirme; sayfa alma, bölme, döndürme, küçültme</li>
+        <li>Fotoğraftan PDF, Türkçe metin çıkarma (OCR)</li>
+        <li>Excel'den toplu UDF</li>
+        <li>İki metin arasında kelime kelime karşılaştırma</li>
+      </ul>
+    </article>
+    <article class="kart">
+      <h3>Bakiyeler</h3>
+      <p>Kapalı dosyalarda müvekkilinizin yatırdığı ve kullanılmamış avans ile tahsilat bakiyelerini tarar, iade dilekçesi hazırlar.</p>
+    </article>
+  </div>
+
+  <div class="grup">Hesap ve büro</div>
+  <div class="izgara">
+    <article class="kart">
+      <h3>Hesaplamalar</h3>
+      <ul>
+        <li>Faiz: yasal, ticari, sözleşme ve işçilik faizleri</li>
+        <li>Harç ve karşı vekâlet ücreti (güncel AAÜT)</li>
+        <li>İşçilik alacakları</li>
+        <li>Aktüerya</li>
+      </ul>
+    </article>
+    <article class="kart">
+      <h3>Büro</h3>
+      <p>Müvekkil kartları, ücret alacağı ve tahsilat, masraf avansı, Excel ekstre. Müvekkilleri UYAP'tan alabilirsiniz. Kayıtlar yalnızca bu bilgisayarda durur.</p>
+    </article>
+  </div>
+
+  <div class="grup">Sistem</div>
+  <div class="izgara">
+    <article class="kart">
+      <h3>UYAP oturumu ve UETS</h3>
+      <p>E-imzayla UYAP girişi. UETS'ye girişten sonra son 14 günün tebligatları okunur, evrakları kaydedilir, son gün hesaplanır. UETS oturumu kendi kuralı gereği 5 dakikada kapanır.</p>
+    </article>
+    <article class="kart">
+      <h3>Ayarlar</h3>
+      <p>Büro bilgileri, evrak klasörü, antet, bildirimler, güncelleme, ayarları başka bilgisayara aktarma. <strong>Gelişmiş ayarları göster</strong> seçilince aşağıdakiler açılır.</p>
+    </article>
+    <article class="kart">
+      <h3>Telefona bildirim</h3>
+      <p>Kendi Telegram botunuzla ya da e-postayla bildirim. Telegram'dan <code>/uets</code>, <code>/giris</code>, <code>/evrak</code>, <code>/sor</code> komutları kullanılabilir; <code>/yardim</code> tümünü listeler.</p>
+    </article>
+    <article class="kart">
+      <h3>Sabah kontrolü</h3>
+      <p>Belirlediğiniz saatte program UETS'ye girer, yeni tebligatları evraklarıyla ve günün özetini telefonunuza gönderir. Bilgisayar açık ve program çalışıyor olmalıdır.</p>
+    </article>
+    <article class="kart">
+      <h3>Tabletten kullanım</h3>
+      <p>Program bilgisayarda çalışır, tablet ekran olur. Bağlantı kendi Tailscale ağınızdan geçer, internete açılmaz.</p>
+    </article>
+    <article class="kart">
+      <h3>Örnek klasörleri</h3>
+      <p>Kendi dilekçe ve sözleşme örneklerinizin klasörünü gösterirseniz asistan biçim ve üslupta onları örnek alır.</p>
+    </article>
+  </div>
+</section>
+
+<section id="guvenlik">
+  <h2>Veri ve güvenlik</h2>
+  <p class="alt">Program neyi nerede tutar, nereye ne gider.</p>
+  <div class="panel">
+    <ul>
+      <li><strong>UYAP'a yazmaz.</strong> Program yalnızca okur; istekler UYAP'ı yormayacak hızda sıralanır, toplu evrak indirme yoktur.</li>
+      <li><strong>Evrak, ayar ve büro kayıtları</strong> bu bilgisayarda durur. PIN ya da UETS şifresini kaydederseniz Windows hesabınıza bağlı şifreli saklanır.</li>
+      <li><strong>Asistanın okuduğu içerik</strong> Claude hesabınız üzerinden Anthropic'e gider. Müvekkil bilgisi paylaşmadan önce Claude hesabınızdaki veri kullanım ayarlarını kontrol edin.</li>
+      <li><strong>Telegram ve e-posta</strong> bildirimleri seçerseniz mesaj içeriği bu hizmetlerin sunucularından geçer.</li>
+      <li><strong>İçtihat ve mevzuat aramaları</strong> bilgisayarınızdan kamu kaynaklarına gider.</li>
+    </ul>
+  </div>
+  <div class="not"><strong>Dikkat.</strong> İcra dosyasında safahat sorgusu ücretsiz sorgu hakkınızdan düşer; program bunu onayınız olmadan yapmaz. Asistan hata yapabilir: hesaplanan son günleri ve karar atıflarını kontrol edin, dilekçeyi UYAP Doküman Editörü'nde gözden geçirip e-imzalayın.</div>
+</section>
+
+<section id="sorunlar">
+  <h2>Sorun giderme</h2>
+  <p class="alt">En sık karşılaşılan durumlar.</p>
+  <details>
+    <summary>Sol altta "UYAP: bağlı değil" yazıyor</summary>
+    <p>UYAP oturumu kapanmıştır. <strong>UYAP oturumu</strong> sayfasından e-imzanızla yeniden girin. Kartın takılı olduğundan emin olun.</p>
+  </details>
+  <details>
+    <summary>Asistan kullanım limitine takıldı</summary>
+    <p>Claude hesabınızın kullanım sınırı dolmuştur. Mesajda yazan saatte yenilenir; o zaman aynı sohbete "devam et" yazın. Ağır işleri aynı saate yığmamak limiti geç doldurur.</p>
+  </details>
+  <details>
+    <summary>Mesaj gönderilmiyor, başka bölümde asistan çalışıyor diyor</summary>
+    <p>Asistan aynı anda tek iş yapar. Diğer bölümdeki işin bitmesini bekleyin ya da o bölümde <strong>Durdur</strong>'a basın.</p>
+  </details>
+  <details>
+    <summary>Asistan Claude'a bağlanamıyor</summary>
+    <p><strong>Genel bakış → Claude bağlantısı</strong> bölümünden kurulumu ve girişi kontrol edin, gerekirse yeniden <strong>Claude'a giriş yap</strong> deyin.</p>
+  </details>
+  <details>
+    <summary>Erişim kodu kabul edilmiyor ya da program erişim kodu soruyor</summary>
+    <p>Kodu boşluk bırakmadan girin. Sorun sürerse sizi davet eden kişiye başvurun. Erişiminiz kapatılırsa program açılmaz, ama verileriniz silinmez.</p>
+  </details>
+  <details>
+    <summary>UETS oturumu kısa sürede kapanıyor</summary>
+    <p>Bu normaldir; UETS kendi kuralı gereği 5 dakika sonra kapatır. Yeni tebligatlar için günde bir kez giriş yeterlidir.</p>
+  </details>
+  <details>
+    <summary>Başka bilgisayara geçeceğim</summary>
+    <p><strong>Ayarlar → Ayarları başka bilgisayara aktar</strong> ile dışa aktarıp yeni bilgisayarda içe aktarın. Avukat adı, IBAN ve klasör yolları aktarılmaz; evrak klasörünü ayrıca taşıyın. Yeni bilgisayarda da erişim kodunuz gerekir.</p>
+  </details>
+  <details>
+    <summary>Programı kaldırmak istiyorum</summary>
+    <p>Windows <strong>Ayarlar → Uygulamalar</strong> bölümünden kaldırın. Evrak klasörünüz ve program verileriniz silinmez.</p>
+  </details>
+</section>
+
+</main>
+
+<footer>Uyap Asistan bağımsız bir programdır; Adalet Bakanlığı, UYAP ya da Anthropic ile ilişkili değildir. Hukuki sorumluluk avukata aittir.</footer>
+
+<script>
+(function () {
+  var DEPO = 'emrhsgn-creator/uyap-asistan-surumler';
+  var indir = document.getElementById('indir');
+  var surum = document.getElementById('surum');
+  document.getElementById('yazdir').addEventListener('click', function () { window.print(); });
+  // PDF'te sorun giderme yanıtları da görünsün.
+  var acilir = document.querySelectorAll('details');
+  window.addEventListener('beforeprint', function () { acilir.forEach(function (d) { d.dataset.acikti = d.open ? '1' : ''; d.open = true; }); });
+  window.addEventListener('afterprint', function () { acilir.forEach(function (d) { d.open = d.dataset.acikti === '1'; }); });
+  fetch('https://api.github.com/repos/' + DEPO + '/releases/latest', { headers: { Accept: 'application/vnd.github+json' } })
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function (s) {
+      var exe = (s.assets || []).filter(function (a) { return /\.exe$/i.test(a.name); })[0];
+      if (!exe) return;
+      indir.href = exe.browser_download_url;
+      var mb = Math.round(exe.size / 1048576);
+      var tarih = new Date(s.published_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+      surum.textContent = 'Sürüm ' + String(s.tag_name).replace(/^v/, '') + ' · ' + mb + ' MB · ' + tarih + '. Program yalnızca size verilen erişim koduyla açılır.';
+    })
+    .catch(function () { /* Düğme son sürüm sayfasına gider; o da yeterlidir. */ });
+})();
+</script>
+</body>
+</html>
